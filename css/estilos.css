@@ -548,7 +548,7 @@ select.select-custom:focus, input.input-custom:focus {
   margin-top: 0.3rem;
 }
 
-/* Desglose de Razonamiento del Agente (Explicación para el Examen) */
+/* Desglose de Razonamiento Lógico del Agente */
 .reasoning-box {
   background: rgba(0, 0, 0, 0.3);
   border-left: 3px solid var(--accent-cyan);
@@ -678,7 +678,7 @@ canvas.chart-canvas {
 }
 
 /* ==========================================================================
-   TAB 3: TEORÍA PEAS Y GUÍA DE DEFENSA (PARA EL EXAMEN ORAL)
+   TAB 3: MARCO TEÓRICO PEAS Y FUNDAMENTACIÓN DE AGENTES
    ========================================================================== */
 .theory-grid {
   display: grid;

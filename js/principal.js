@@ -33,36 +33,67 @@ const APP = (function () {
 
   // Navegación de pestañas
   function configurarTabs() {
-    const tabBtns = document.querySelectorAll(".tab-btn");
+    const tabBtns = document.querySelectorAll(".tab-btn[data-tab]");
     tabBtns.forEach((btn) => {
       btn.addEventListener("click", () => {
         const targetTab = btn.getAttribute("data-tab");
+        if (!targetTab) return;
+
         tabBtns.forEach((b) => b.classList.remove("active"));
         btn.classList.add("active");
 
         document.querySelectorAll(".tab-panel").forEach((panel) => {
           panel.classList.remove("active");
         });
-        const activePanel = document.getElementById(targetTab);
-        if (activePanel) activePanel.classList.add("active");
 
         detenerAuto();
-        if (targetTab === "tab-simulador") {
-          modoActual = "agente";
-          document.getElementById("btnJugarManual").style.display = "none";
-          document.getElementById("btnAutoAgente").style.display = "inline-flex";
-          document.getElementById("selectAgente").style.display = "inline-block";
-          document.getElementById("panelAccionesManual").style.display = "none";
-          reiniciarPartida();
-        } else if (targetTab === "tab-manual") {
-          modoActual = "manual";
-          document.getElementById("btnJugarManual").style.display = "inline-flex";
-          document.getElementById("btnAutoAgente").style.display = "none";
-          document.getElementById("selectAgente").style.display = "none";
-          document.getElementById("panelAccionesManual").style.display = "grid";
-          reiniciarPartida();
-        } else if (targetTab === "tab-benchmark") {
-          ejecutarBenchmarkMasivo(200);
+
+        if (targetTab === "tab-simulador" || targetTab === "tab-manual") {
+          const simPanel = document.getElementById("tab-simulador");
+          if (simPanel) simPanel.classList.add("active");
+
+          if (targetTab === "tab-manual") {
+            modoActual = "manual";
+            const grupoAgente = document.getElementById("grupoControlAgente");
+            if (grupoAgente) grupoAgente.style.display = "none";
+            const btnAuto = document.getElementById("btnAutoAgente");
+            if (btnAuto) btnAuto.style.display = "none";
+            const btnPaso = document.getElementById("btnSiguientePaso");
+            if (btnPaso) btnPaso.style.display = "none";
+            const grupoVel = document.getElementById("grupoVelocidad");
+            if (grupoVel) grupoVel.style.display = "none";
+            const badgeManual = document.getElementById("badgeModoManual");
+            if (badgeManual) badgeManual.style.display = "inline-flex";
+
+            const panelManual = document.getElementById("panelAccionesManual");
+            if (panelManual) panelManual.style.display = "grid";
+
+            reiniciarPartida();
+          } else {
+            modoActual = "agente";
+            const grupoAgente = document.getElementById("grupoControlAgente");
+            if (grupoAgente) grupoAgente.style.display = "inline-flex";
+            const btnAuto = document.getElementById("btnAutoAgente");
+            if (btnAuto) btnAuto.style.display = "inline-flex";
+            const btnPaso = document.getElementById("btnSiguientePaso");
+            if (btnPaso) btnPaso.style.display = "inline-flex";
+            const grupoVel = document.getElementById("grupoVelocidad");
+            if (grupoVel) grupoVel.style.display = "inline-flex";
+            const badgeManual = document.getElementById("badgeModoManual");
+            if (badgeManual) badgeManual.style.display = "none";
+
+            const panelManual = document.getElementById("panelAccionesManual");
+            if (panelManual) panelManual.style.display = "none";
+
+            reiniciarPartida();
+          }
+        } else {
+          const activePanel = document.getElementById(targetTab);
+          if (activePanel) activePanel.classList.add("active");
+
+          if (targetTab === "tab-benchmark") {
+            ejecutarBenchmarkMasivo(200);
+          }
         }
       });
     });
@@ -190,6 +221,37 @@ const APP = (function () {
     jornadaActual = MOTOR.generarJornada(semillaActual);
     estadoActual = MOTOR.crearEstadoInicial();
     actualizarUI();
+
+    const bubbleAvatar = document.getElementById("bubbleAvatar");
+    const bubbleTitle = document.getElementById("bubbleTitle");
+    const bubbleText = document.getElementById("bubbleText");
+    const reasoningBox = document.getElementById("reasoningBox");
+
+    if (modoActual === "manual") {
+      if (bubbleAvatar) bubbleAvatar.textContent = "👤";
+      if (bubbleTitle) bubbleTitle.textContent = "Tú (Control Manual) — Turno 1:";
+      if (bubbleText) {
+        bubbleText.textContent = '"Turno nocturno iniciado. Evalúa la tarifa vs riesgo del pedido entrante en tu app y presiona Aceptar, Rechazar, Grifo o Tambo."';
+      }
+      if (reasoningBox) {
+        reasoningBox.innerHTML = `
+          <div class="reasoning-title" style="color: var(--accent-cyan);">🎮 MODO MANUAL ACTIVO</div>
+          <div>Tú decides por Chambi. Elige una acción con los botones de abajo para responder a la app.</div>
+        `;
+      }
+    } else {
+      if (bubbleAvatar) bubbleAvatar.textContent = agenteSeleccionado.icono || "🛵";
+      if (bubbleTitle) bubbleTitle.textContent = `${agenteSeleccionado.nombre} — Razonamiento:`;
+      if (bubbleText) {
+        bubbleText.textContent = '"Iniciando turno nocturno en Miraflores con S/ 25 de caja chica. Preparando evaluación de pedidos..."';
+      }
+      if (reasoningBox) {
+        reasoningBox.innerHTML = `
+          <div class="reasoning-title">Desglose Lógico (${agenteSeleccionado.nombre}):</div>
+          <div>Esperando el primer paso de decisión...</div>
+        `;
+      }
+    }
   }
 
   // Ciclo automático para ver al agente
@@ -384,6 +446,26 @@ const APP = (function () {
     // Tarjeta del pedido entrante
     actualizarTarjetaPedido(pedido);
 
+    // Control de visibilidad y estado del panel de botones manuales
+    const panelManual = document.getElementById("panelAccionesManual");
+    if (panelManual) {
+      if (modoActual === "manual" && !estadoActual.terminado) {
+        panelManual.style.display = "grid";
+        const btnTanqueo = document.getElementById("btnTanqueoManual");
+        const btnCarga = document.getElementById("btnCargaManual");
+        if (btnTanqueo) {
+          btnTanqueo.disabled = estadoActual.saldo < MOTOR.CONFIG.COSTO_GASOLINA_TANQUEO;
+          btnTanqueo.style.opacity = btnTanqueo.disabled ? "0.45" : "1";
+        }
+        if (btnCarga) {
+          btnCarga.disabled = estadoActual.saldo < MOTOR.CONFIG.COSTO_RECARGA_BATERIA;
+          btnCarga.style.opacity = btnCarga.disabled ? "0.45" : "1";
+        }
+      } else {
+        panelManual.style.display = "none";
+      }
+    }
+
     // Estado del juego / Fin de jornada
     if (estadoActual.terminado) {
       const metricas = MOTOR.calcularMetricas(estadoActual);
@@ -445,16 +527,34 @@ const APP = (function () {
   function mostrarResumenFinTurno(m) {
     const bubbleTitle = document.getElementById("bubbleTitle");
     const bubbleText = document.getElementById("bubbleText");
+    const reasoningBox = document.getElementById("reasoningBox");
 
     if (bubbleTitle) bubbleTitle.textContent = "Balance Final de la Jornada:";
     if (bubbleText) {
       if (m.llegoAlFinal) {
-        bubbleText.textContent = `🎉 ¡Jornada exitosa! Saldo neto: S/ ${m.saldoNeto} (después de cuota de moto y cena). Puntaje formal de rendimiento: ${m.puntaje} pts.`;
+        bubbleText.textContent = `🎉 ¡Jornada exitosa! Saldo neto: S/ ${m.saldoNeto} (después de cuota de moto S/ 35 y cena S/ 10). Puntaje de rendimiento: ${m.puntaje} pts.`;
       } else if (m.varado) {
         bubbleText.textContent = `⚠️ Fracaso operativo: Chambi se quedó varado en la pista por falta de combustible o batería. Puntaje: ${m.puntaje} pts.`;
       } else {
-        bubbleText.textContent = `❌ Quiebre económico: No se cubrió la cuota obligatoria de la moto. Saldo negativo: S/ ${m.saldoNeto}. Puntaje: ${m.puntaje} pts.`;
+        bubbleText.textContent = `❌ Quiebre económico: No se cubrió la cuota obligatoria de la moto. Saldo neto: S/ ${m.saldoNeto}. Puntaje: ${m.puntaje} pts.`;
       }
+    }
+
+    if (reasoningBox) {
+      reasoningBox.innerHTML = `
+        <div class="reasoning-title" style="color: ${m.llegoAlFinal ? 'var(--accent-green)' : 'var(--accent-red)'}; font-size: 0.85rem;">
+          ${m.llegoAlFinal ? '🏆 ¡JORNADA COMPLETADA CON ÉXITO!' : '💀 TURNO FINALIZADO (QUIEBRE / VARADO)'}
+        </div>
+        <div style="margin-top: 0.3rem;">
+          Entregados: <strong>${estadoActual.pedidosEntregados}</strong> | Rechazados: <strong>${estadoActual.pedidosRechazados}</strong> | Asaltos: <strong>${estadoActual.asaltosSufridos}</strong>
+        </div>
+        <div style="margin-top: 0.2rem;">
+          Saldo Neto Final: <strong>S/ ${m.saldoNeto}</strong> | Puntaje Oficial: <strong>${m.puntaje} pts</strong>
+        </div>
+        <div style="margin-top: 0.4rem; color: var(--accent-cyan); font-size: 0.75rem;">
+          Presiona <strong>🔄 Reiniciar</strong> para iniciar otra noche con nueva semilla.
+        </div>
+      `;
     }
   }
 

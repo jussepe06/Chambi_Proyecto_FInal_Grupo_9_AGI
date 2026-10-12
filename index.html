@@ -31,7 +31,7 @@
         <span>📊</span> Comparar Agentes (200 Runs)
       </button>
       <button class="tab-btn" data-tab="tab-teoria">
-        <span>📘</span> Teoría PEAS & Examen
+        <span>📘</span> Marco Teórico & PEAS
       </button>
       <button id="btnToggleAudio" class="tab-btn" style="color: var(--accent-yellow);" title="Activar/Silenciar Efectos de Audio">
         <span>🔊</span> Audio: ON
@@ -75,7 +75,7 @@
 
           <!-- Barra de controles de ejecución -->
           <div class="sim-controls-bar">
-            <div class="control-group">
+            <div id="grupoControlAgente" class="control-group">
               <span class="control-label">Agente:</span>
               <select id="selectAgente" class="select-custom">
                 <option value="utilidad" selected>⚖️ Basado en Utilidad</option>
@@ -86,12 +86,16 @@
               </select>
             </div>
 
+            <div id="badgeModoManual" class="badge" style="background: rgba(0, 240, 255, 0.15); border: 1px solid var(--accent-cyan); color: var(--accent-cyan); font-weight: 700; padding: 0.5rem 0.8rem; display: none;">
+              <span>🎮</span> MODO MANUAL ACTIVO
+            </div>
+
             <div class="control-group">
               <span class="control-label">Semilla:</span>
               <input type="number" id="inputSemilla" class="input-custom" value="2025" style="width: 80px;">
             </div>
 
-            <div class="control-group">
+            <div id="grupoVelocidad" class="control-group">
               <span class="control-label">Velocidad:</span>
               <select id="selectVelocidad" class="select-custom">
                 <option value="1200">Lento (1.2s)</option>
@@ -168,7 +172,7 @@
             <button id="btnCargaManual" class="btn btn-secondary">🔋 Tambo (S/ 3)</button>
           </div>
 
-          <!-- Cuadro de razonamiento lógico formal para defender en el examen -->
+          <!-- Cuadro de razonamiento lógico formal del agente -->
           <div id="reasoningBox" class="reasoning-box">
             <div class="reasoning-title">Desglose Lógico del Agente:</div>
             <div>Esperando el primer paso de decisión...</div>
@@ -181,11 +185,6 @@
         </div>
 
       </div>
-    </section>
-
-    <!-- PESTAÑA MANUAL (REUTILIZA ESTRUCTURA COMPARTIENDO EVENTOS) -->
-    <section id="tab-manual" class="tab-panel">
-      <!-- Mismo contenedor enrutado por JS -->
     </section>
 
     <!-- ====================================================================
@@ -289,7 +288,7 @@
     </section>
 
     <!-- ====================================================================
-         PESTAÑA 4: TEORÍA PEAS & GUÍA PARA RESPONDER CON LAS MANOS ARRIBA
+         PESTAÑA 4: MARCO TEÓRICO PEAS & ARQUITECTURA DE AGENTES
          ==================================================================== -->
     <section id="tab-teoria" class="tab-panel">
       <div class="theory-grid">
@@ -319,35 +318,35 @@
           </div>
         </div>
 
-        <!-- Guía de Preguntas Trampa del Examen -->
+        <!-- Arquitectura y Fundamentos de IA -->
         <div class="theory-card">
-          <h3><span>🗣️</span> Guía de Defensa Oral: "Con las Manos Arriba"</h3>
+          <h3><span>🧠</span> Fundamentación Teórica & Arquitectura de Racionalidad</h3>
 
           <div class="theory-item">
-            <h4>1. "¿Cuál es la diferencia entre el Agente Basado en Modelo y el de Objetivos?"</h4>
+            <h4>1. Diferenciación Arquitectónica: Modelo Interno vs. Jerarquía de Metas</h4>
             <p>
-              <strong>Respuesta de 20:</strong> El <em>Agente de Modelo</em> mantiene un <strong>estado interno proyectado</strong> (calcula numéricamente la reserva de combustible para volver a casa, la cuota fija de la moto y el colchón de lluvia). En cambio, el <em>Agente de Objetivos</em> opera con una <strong>jerarquía estricta de metas en cascada</strong> (1. Seguridad física, 2. No quedar varado, 3. Reputación, 4. Cuota, 5. Lucro) y bloquea cualquier acción que vulnere una meta superior pendiente.
+              El <strong>Agente Basado en Modelos</strong> mantiene un <strong>estado interno proyectado</strong> (calcula numéricamente la autonomía de combustible, cuota fija de la moto y reservas de contingencia por lluvia). En contraparte, el <strong>Agente Basado en Objetivos</strong> opera bajo una <strong>jerarquía lexicográfica de metas en cascada</strong> (1. Integridad física, 2. Operatividad continua, 3. Reputación, 4. Cobertura de cuota, 5. Ganancia libre) y bloquea toda acción que vulnere una meta superior pendiente.
             </p>
           </div>
 
           <div class="theory-item">
-            <h4>2. "¿Por qué el Agente de Utilidad supera a los demás?"</h4>
+            <h4>2. Optimización Multicriterio mediante Función de Utilidad</h4>
             <p>
-              <strong>Respuesta de 20:</strong> Porque resuelve cuantitativamente los <strong>dilemas de compromiso (trade-offs)</strong>. Si un pedido entra a una zona de riesgo moderado pero ofrece una propina astronómica de S/ 35, el agente de objetivos lo rechaza por rigidez, mientras que la función de utilidad calcula matemáticamente si la ganancia compensa el riesgo esperado: <code>U(s) = w_pago · Pago - w_riesgo · Peligro</code>.
+              El <strong>Agente Basado en Utilidad</strong> resuelve cuantitativamente los <strong>dilemas de compromiso (trade-offs)</strong>. Ante un pedido con retribución atractiva pero en zona de riesgo moderado, la función evalúa matemáticamente el balance escalar esperado: <code>U(s, a) = w_pago · ΔDinero - w_riesgo · Riesgo - w_recursos · Desgaste</code>, maximizando la recompensa acumulada a largo plazo sin heurísticas rígidas.
             </p>
           </div>
 
           <div class="theory-item">
-            <h4>3. "¿Cómo cambias la regla del Agente Reflejo si te lo pido en vivo?"</h4>
+            <h4>3. Parametrización y Aislamiento de Reglas de Condición-Acción</h4>
             <p>
-              <strong>Respuesta de 20:</strong> En el archivo <code>js/agentes/reflejo.js</code>, en las primeras líneas están parametrizados <code>limiteTarifaMinima</code> y <code>limiteBateriaCritica</code>. Modificar ese número altera instantáneamente la regla condición-acción sin afectar al resto del sistema.
+              La implementación del <strong>Agente Reflejo Simple</strong> desacopla los umbrales de decisión (<code>limiteTarifaMinima</code> y <code>limiteBateriaCritica</code> en <code>js/agentes/reflejo.js</code>) del ciclo perceptivo. Modificar estos parámetros ajusta directamente el comportamiento reactivo en tiempo de ejecución sin alterar el núcleo de simulación.
             </p>
           </div>
 
           <div class="theory-item">
-            <h4>4. "¿Cómo se conecta esto con el Avance 2 (Machine Learning)?"</h4>
+            <h4>4. Pipeline de Datos y Escalabilidad a Aprendizaje Automático</h4>
             <p>
-              <strong>Respuesta de 20:</strong> Con el módulo <code>telemetria.js</code>, cada paso de los agentes expertos se almacena como un vector tabular de características (features). En la Semana 15, usaremos este dataset para entrenar un modelo predictivo de <em>Imitation Learning / Random Forest</em> que imite la toma de decisiones óptima de Utilidad en complejidad $O(1)$.
+              A través del módulo <code>telemetria.js</code>, cada transición perceptual y decisión experta se registra como un vector tabular de características. Esta infraestructura habilita en la siguiente etapa el entrenamiento de modelos de <strong>Clonación de Comportamiento (Imitation Learning / Random Forest)</strong> y políticas de <strong>Aprendizaje por Refuerzo (Q-Learning)</strong> con inferencia en $O(1)$.
             </p>
           </div>
         </div>
