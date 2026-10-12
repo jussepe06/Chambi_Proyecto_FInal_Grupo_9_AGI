@@ -1,0 +1,8 @@
+# Ignorar archivos temporales y grabaciones privadas
+Copia_de_grabacion_de_compañera
+Copia_de_grabacion_de_compañera.*
+*.log
+.DS_Store
+Thumbs.db
+__pycache__/
+*.pyc

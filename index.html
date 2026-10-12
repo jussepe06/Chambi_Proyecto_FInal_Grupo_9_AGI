@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>El Turno de Chambi: Delivery Nocturno en Lima — Grupo 9_AGI</title>
+  <link rel="stylesheet" href="css/estilos.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220%22%20%220%22%20100%22%20100%22><text y=%22.9em%22 font-size=%2290%22>🛵</text></svg>">
+</head>
+<body>
+
+  <!-- HEADER & NAVBAR -->
+  <header class="app-header">
+    <div class="brand-wrapper">
+      <div class="brand-icon">🛵</div>
+      <div class="brand-title">
+        <h1>El Turno de Chambi: Delivery Nocturno — Grupo 9_AGI</h1>
+        <p>Simulador Táctico Multiagente & Benchmark de Toma de Decisiones en Lima</p>
+      </div>
+    </div>
+
+    <!-- Navegación por pestañas -->
+    <nav class="nav-tabs">
+      <button class="tab-btn active" data-tab="tab-simulador">
+        <span>🤖</span> Ver a un Agente
+      </button>
+      <button class="tab-btn" data-tab="tab-manual">
+        <span>👤</span> Jugar Yo (Manual)
+      </button>
+      <button class="tab-btn" data-tab="tab-benchmark">
+        <span>📊</span> Comparar Agentes (200 Runs)
+      </button>
+      <button class="tab-btn" data-tab="tab-teoria">
+        <span>📘</span> Teoría PEAS & Examen
+      </button>
+      <button id="btnToggleAudio" class="tab-btn" style="color: var(--accent-yellow);" title="Activar/Silenciar Efectos de Audio">
+        <span>🔊</span> Audio: ON
+      </button>
+    </nav>
+  </header>
+
+  <!-- CONTENIDO PRINCIPAL -->
+  <main class="main-content">
+
+    <!-- ====================================================================
+         PESTAÑA 1 & 2: SIMULADOR (AUTÓNOMO O MANUAL)
+         ==================================================================== -->
+    <section id="tab-simulador" class="tab-panel active">
+      <div class="simulator-grid">
+        
+        <!-- COLUMNA IZQUIERDA: CANVAS DEL MAPA & PENSAMIENTOS -->
+        <div class="map-hud-container">
+          
+          <div class="canvas-wrapper">
+            <!-- Barra flotante superior en el mapa -->
+            <div class="canvas-status-bar">
+              <span id="badgeHora" class="badge badge-time">🕒 19:00</span>
+              <span id="badgeClima" class="badge badge-weather">🌧️ Despejado</span>
+            </div>
+
+            <!-- Canvas de la Ciudad de Lima -->
+            <canvas id="cityCanvas"></canvas>
+
+            <!-- Nube de pensamiento del agente en tiempo real -->
+            <div class="agent-thought-bubble">
+              <div id="bubbleAvatar" class="bubble-avatar">🛵</div>
+              <div class="bubble-body">
+                <div id="bubbleTitle" class="bubble-title">Razonamiento del Agente:</div>
+                <div id="bubbleText" class="bubble-text">
+                  "Iniciando turno nocturno en Miraflores con S/ 25 de caja chica. Preparando evaluación de pedidos..."
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Barra de controles de ejecución -->
+          <div class="sim-controls-bar">
+            <div class="control-group">
+              <span class="control-label">Agente:</span>
+              <select id="selectAgente" class="select-custom">
+                <option value="utilidad" selected>⚖️ Basado en Utilidad</option>
+                <option value="objetivos">🎯 Basado en Objetivos</option>
+                <option value="modelo">🧠 Basado en Modelo</option>
+                <option value="reflejo">⚡ Reflejo Simple</option>
+                <option value="base">🛵 Base (Ingenuo)</option>
+              </select>
+            </div>
+
+            <div class="control-group">
+              <span class="control-label">Semilla:</span>
+              <input type="number" id="inputSemilla" class="input-custom" value="2025" style="width: 80px;">
+            </div>
+
+            <div class="control-group">
+              <span class="control-label">Velocidad:</span>
+              <select id="selectVelocidad" class="select-custom">
+                <option value="1200">Lento (1.2s)</option>
+                <option value="800" selected>Normal (0.8s)</option>
+                <option value="350">Rápido (0.3s)</option>
+              </select>
+            </div>
+
+            <div class="control-group">
+              <button id="btnSiguientePaso" class="btn btn-secondary">
+                <span>⏭️</span> Paso a Paso
+              </button>
+              <button id="btnAutoAgente" class="btn btn-primary">
+                <span>▶️</span> Auto Run
+              </button>
+              <button id="btnReiniciar" class="btn btn-secondary">
+                <span>🔄</span> Reiniciar
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- COLUMNA DERECHA: SMARTPHONE / HUD DE RECURSOS DE CHAMBI -->
+        <div class="phone-hud-card">
+          <div class="hud-header">
+            <h3><span>📱</span> App Repartidor</h3>
+            <div class="hud-net-worth">
+              <div class="net-label">Saldo Acumulado</div>
+              <div id="hudSaldo" class="net-value">S/ 25.0</div>
+            </div>
+          </div>
+
+          <!-- Recursos físicos -->
+          <div class="stat-row">
+            <div class="stat-label-wrap">
+              <span class="stat-name">🔋 Batería del Celular</span>
+              <span id="valBateria" class="stat-value">85%</span>
+            </div>
+            <div class="progress-track">
+              <div id="barBateria" class="progress-fill fill-battery" style="width: 85%;"></div>
+            </div>
+          </div>
+
+          <div class="stat-row">
+            <div class="stat-label-wrap">
+              <span class="stat-name">⛽ Combustible de la Moto</span>
+              <span id="valCombustible" class="stat-value">80%</span>
+            </div>
+            <div class="progress-track">
+              <div id="barCombustible" class="progress-fill fill-fuel" style="width: 80%;"></div>
+            </div>
+          </div>
+
+          <div class="stat-row">
+            <div class="stat-label-wrap">
+              <span class="stat-name">⭐ Calificación de la App</span>
+              <span id="valRating" class="stat-value">★ 4.95</span>
+            </div>
+            <div class="progress-track">
+              <div id="barRating" class="progress-fill fill-rating" style="width: 98%;"></div>
+            </div>
+          </div>
+
+          <!-- Tarjeta del Pedido Entrante -->
+          <div id="tarjetaPedido" class="order-card">
+            <!-- Rellenado dinámicamente -->
+          </div>
+
+          <!-- Panel de control manual (Visible solo en pestaña manual) -->
+          <div id="panelAccionesManual" class="order-actions-manual" style="display: none;">
+            <button id="btnAceptarManual" class="btn btn-success">✅ Aceptar</button>
+            <button id="btnRechazarManual" class="btn btn-danger">❌ Rechazar</button>
+            <button id="btnTanqueoManual" class="btn btn-secondary">⛽ Grifo (S/ 15)</button>
+            <button id="btnCargaManual" class="btn btn-secondary">🔋 Tambo (S/ 3)</button>
+          </div>
+
+          <!-- Cuadro de razonamiento lógico formal para defender en el examen -->
+          <div id="reasoningBox" class="reasoning-box">
+            <div class="reasoning-title">Desglose Lógico del Agente:</div>
+            <div>Esperando el primer paso de decisión...</div>
+          </div>
+
+          <!-- Botón de descarga de dataset para Machine Learning -->
+          <button id="btnDescargarCSV" class="btn btn-secondary" style="margin-top: auto; justify-content: center;">
+            <span>📥</span> Descargar Dataset ML (CSV)
+          </button>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- PESTAÑA MANUAL (REUTILIZA ESTRUCTURA COMPARTIENDO EVENTOS) -->
+    <section id="tab-manual" class="tab-panel">
+      <!-- Mismo contenedor enrutado por JS -->
+    </section>
+
+    <!-- ====================================================================
+         PESTAÑA 3: BENCHMARK COMPARATIVO MASIVO (200 RUNS)
+         ==================================================================== -->
+    <section id="tab-benchmark" class="tab-panel">
+      <div class="benchmark-container">
+        
+        <div class="benchmark-header-card">
+          <div>
+            <h2>📊 Benchmark Comparativo: 200 Jornadas Simuladas</h2>
+            <p style="color: var(--text-muted); font-size: 0.9rem; margin-top: 0.3rem;">
+              Simulación estocástica reproducible con semillas 2025 a 2224. Cada agente enfrenta exactamente los mismos eventos, clima y pedidos.
+            </p>
+          </div>
+          <div style="display: flex; gap: 0.8rem; align-items: center;">
+            <span style="font-size: 0.85rem; color: var(--text-muted);">Tiempo de cómputo: <strong id="benchmarkTiempoTotal" style="color: var(--accent-cyan);">-- ms</strong></span>
+            <button onclick="APP.ejecutarBenchmarkMasivo(200)" class="btn btn-primary">
+              <span>⚡</span> Repetir 200 Runs
+            </button>
+          </div>
+        </div>
+
+        <!-- Tabla estadística formal -->
+        <div class="benchmark-stats-table-wrapper">
+          <table class="stats-table">
+            <thead>
+              <tr>
+                <th>Técnica (Agente)</th>
+                <th>Puntaje Promedio (95% Confianza)</th>
+                <th>Tasa de Supervivencia (%)</th>
+                <th>Saldo Neto Promedio</th>
+                <th>Tiempo de Ejecución</th>
+                <th>Corridas</th>
+              </tr>
+            </thead>
+            <tbody id="tbodyBenchmark">
+              <!-- Rellenado dinámicamente -->
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Gráficos Estadísticos Canvas -->
+        <div class="charts-grid">
+          <div class="chart-card">
+            <h4>📈 Rendimiento Promedio por Agente (Puntaje Formal)</h4>
+            <canvas id="chartPuntajesCanvas" class="chart-canvas"></canvas>
+          </div>
+          <div class="chart-card">
+            <h4>🛡️ Tasa de Supervivencia (% Jornadas Sin Quiebre ni Asalto)</h4>
+            <canvas id="chartSupervivenciaCanvas" class="chart-canvas"></canvas>
+          </div>
+        </div>
+
+        <!-- Panel de Calibración de Pesos de Utilidad en Vivo -->
+        <div class="chart-card">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+            <h4>⚙️ Calibrador en Vivo de la Función de Utilidad (Sliders de Ponderación)</h4>
+            <span style="font-size: 0.8rem; color: var(--accent-green); font-weight: 700;">Reactivo en Tiempo Real</span>
+          </div>
+          <p style="font-size: 0.84rem; color: var(--text-muted); margin-bottom: 1rem;">
+            Modifica los pesos $w_i$ de la fórmula matemática para demostrarle al profesor cómo cambian las decisiones de Chambi en el simulador:
+          </p>
+          
+          <div class="sliders-grid">
+            <div class="slider-group">
+              <div class="slider-label-row">
+                <span>Peso Ganancia Económica (wPago):</span>
+                <span id="valPago" style="color: var(--accent-green);">1.8</span>
+              </div>
+              <input type="range" id="sliderPago" min="0.5" max="4.0" step="0.1" value="1.8">
+            </div>
+
+            <div class="slider-group">
+              <div class="slider-label-row">
+                <span>Penalización por Riesgo de Zona (wRiesgo):</span>
+                <span id="valRiesgo" style="color: var(--accent-red);">2.5</span>
+              </div>
+              <input type="range" id="sliderRiesgo" min="0.5" max="5.0" step="0.1" value="2.5">
+            </div>
+
+            <div class="slider-group">
+              <div class="slider-label-row">
+                <span>Cuidado de Recursos Físicos (wRecursos):</span>
+                <span id="valRecursos" style="color: var(--accent-yellow);">1.4</span>
+              </div>
+              <input type="range" id="sliderRecursos" min="0.5" max="3.5" step="0.1" value="1.4">
+            </div>
+
+            <div class="slider-group">
+              <div class="slider-label-row">
+                <span>Valoración de Reputación (wRating):</span>
+                <span id="valRating" style="color: var(--accent-purple);">1.0</span>
+              </div>
+              <input type="range" id="sliderRating" min="0.2" max="3.0" step="0.1" value="1.0">
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ====================================================================
+         PESTAÑA 4: TEORÍA PEAS & GUÍA PARA RESPONDER CON LAS MANOS ARRIBA
+         ==================================================================== -->
+    <section id="tab-teoria" class="tab-panel">
+      <div class="theory-grid">
+
+        <!-- Marco PEAS -->
+        <div class="theory-card">
+          <h3><span>📐</span> Especificación Formal del Entorno (PEAS)</h3>
+          
+          <div class="theory-item active">
+            <h4>P — Rendimiento (Performance)</h4>
+            <p>Maximizar el saldo neto final tras deducir la cuota fija de alquiler de la moto (S/ 45) y la cena (S/ 12). Se penaliza severamente el quiebre por quedar varado sin combustible/batería (-100 pts) o sufrir asalto en zona roja (-150 pts).</p>
+          </div>
+
+          <div class="theory-item active">
+            <h4>E — Entorno (Environment)</h4>
+            <p><strong>Parcialmente Estocástico</strong> (eventos de tráfico, lluvia y riesgo deterministas por semilla PRNG), <strong>Dinámico</strong> (la hora avanza y los distritos se tornan más peligrosos de noche), <strong>Secuencial</strong> (cada entrega altera la posición y recursos para el siguiente paso).</p>
+          </div>
+
+          <div class="theory-item active">
+            <h4>A — Actuadores (Actuators)</h4>
+            <p>Cuatro decisiones tácticas discretas: <code>aceptar</code> pedido, <code>rechazar</code> pedido, <code>recargar_combustible</code> en grifo (+55% por S/ 15), y <code>cargar_bateria</code> en Tambo (+45% por S/ 3).</p>
+          </div>
+
+          <div class="theory-item active">
+            <h4>S — Sensores (Sensors)</h4>
+            <p>Percepción de telemetría estructurada: nivel de batería (%), combustible (%), saldo actual (S/), calificación (★), y ficha del pedido entrante (origen, destino, tarifa, distancia km, probabilidad de asalto).</p>
+          </div>
+        </div>
+
+        <!-- Guía de Preguntas Trampa del Examen -->
+        <div class="theory-card">
+          <h3><span>🗣️</span> Guía de Defensa Oral: "Con las Manos Arriba"</h3>
+
+          <div class="theory-item">
+            <h4>1. "¿Cuál es la diferencia entre el Agente Basado en Modelo y el de Objetivos?"</h4>
+            <p>
+              <strong>Respuesta de 20:</strong> El <em>Agente de Modelo</em> mantiene un <strong>estado interno proyectado</strong> (calcula numéricamente la reserva de combustible para volver a casa, la cuota fija de la moto y el colchón de lluvia). En cambio, el <em>Agente de Objetivos</em> opera con una <strong>jerarquía estricta de metas en cascada</strong> (1. Seguridad física, 2. No quedar varado, 3. Reputación, 4. Cuota, 5. Lucro) y bloquea cualquier acción que vulnere una meta superior pendiente.
+            </p>
+          </div>
+
+          <div class="theory-item">
+            <h4>2. "¿Por qué el Agente de Utilidad supera a los demás?"</h4>
+            <p>
+              <strong>Respuesta de 20:</strong> Porque resuelve cuantitativamente los <strong>dilemas de compromiso (trade-offs)</strong>. Si un pedido entra a una zona de riesgo moderado pero ofrece una propina astronómica de S/ 35, el agente de objetivos lo rechaza por rigidez, mientras que la función de utilidad calcula matemáticamente si la ganancia compensa el riesgo esperado: <code>U(s) = w_pago · Pago - w_riesgo · Peligro</code>.
+            </p>
+          </div>
+
+          <div class="theory-item">
+            <h4>3. "¿Cómo cambias la regla del Agente Reflejo si te lo pido en vivo?"</h4>
+            <p>
+              <strong>Respuesta de 20:</strong> En el archivo <code>js/agentes/reflejo.js</code>, en las primeras líneas están parametrizados <code>limiteTarifaMinima</code> y <code>limiteBateriaCritica</code>. Modificar ese número altera instantáneamente la regla condición-acción sin afectar al resto del sistema.
+            </p>
+          </div>
+
+          <div class="theory-item">
+            <h4>4. "¿Cómo se conecta esto con el Avance 2 (Machine Learning)?"</h4>
+            <p>
+              <strong>Respuesta de 20:</strong> Con el módulo <code>telemetria.js</code>, cada paso de los agentes expertos se almacena como un vector tabular de características (features). En la Semana 15, usaremos este dataset para entrenar un modelo predictivo de <em>Imitation Learning / Random Forest</em> que imite la toma de decisiones óptima de Utilidad en complejidad $O(1)$.
+            </p>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="app-footer">
+    <p>Trabajo Final de Agentes Inteligentes — USIL 2026-2 | Grupo 9_AGI | El Turno de Chambi: Delivery Nocturno en Lima</p>
+  </footer>
+
+  <!-- Scripts modulares -->
+  <script src="js/nucleo/motor.js"></script>
+  <script src="js/nucleo/telemetria.js"></script>
+  <script src="js/agentes/base.js"></script>
+  <script src="js/agentes/reflejo.js"></script>
+  <script src="js/agentes/modelo.js"></script>
+  <script src="js/agentes/objetivos.js"></script>
+  <script src="js/agentes/utilidad.js"></script>
+  <script src="js/mapa/canvas.js"></script>
+  <script src="js/interfaz/audio.js"></script>
+  <script src="js/interfaz/graficos.js"></script>
+  <script src="js/principal.js"></script>
+</body>
+</html>
