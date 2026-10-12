@@ -17,7 +17,7 @@ const AGENTE_OBJETIVOS = {
 
   // Definición de las metas en estricto orden de precedencia (0 = máxima prioridad)
   METAS: [
-    { id: 0, nombre: "Seguridad Física", desc: "Evitar zonas rojas de asalto a toda costa" },
+    { id: 0, nombre: "Seguridad Operativa", desc: "Evitar zonas rojas de alto peligro a toda costa" },
     { id: 1, nombre: "Operatividad Continua", desc: "Batería y combustible siempre por encima del 18%" },
     { id: 2, nombre: "Reputación Profesional", desc: "Mantener rating en la app >= 4.70 estrellas" },
     { id: 3, nombre: "Meta de Cobertura Base", desc: "Alcanzar S/ 45 para pagar la cuota de la moto y cenar" },

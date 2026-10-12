@@ -90,9 +90,9 @@ const MOTOR = (function () {
       const factorHora = horaMin > (22 * 60) ? 1.4 : 1.0;
       const probAsalto = parseFloat(Math.min(0.85, destino.factorPeligro * factorHora).toFixed(2));
 
-      // Ocurrencia del asalto según semilla si decide aceptar
+      // Asaltos desactivados: nunca habra asaltos
       const azarAsalto = rand();
-      const habraAsalto = azarAsalto < probAsalto;
+      const habraAsalto = false;
 
       // Evento de sorpresa mecánica eventual (pinchazo de llanta o lluvia)
       const azarPinchazo = rand() < 0.12;
@@ -155,12 +155,9 @@ const MOTOR = (function () {
       nuevo.distritoActual = pedido.destino;
       nuevo.pedidosEntregados += 1;
 
-      // Evaluar consecuencias del entorno
+      // Evaluar consecuencias del entorno (asaltos desactivados)
       if (pedido.habraAsalto) {
-        // Sufre asalto en zona roja: pierde lo ganado en el pedido + costo de reposición
         nuevo.asaltosSufridos += 1;
-        nuevo.saldo = Math.max(0, nuevo.saldo - (pedido.pagoTotal + 35.0));
-        nuevo.rating = Math.max(1.0, nuevo.rating - 0.4);
         if (nuevo.asaltosSufridos >= 2) {
           nuevo.asaltadoGrave = true;
           nuevo.terminado = true;

@@ -57,7 +57,7 @@ const AGENTE_REFLEJO = {
       return {
         accion: "rechazar",
         razon: `Regla Reflejo: Destino peligroso (${p.distritoDestino} - Zona Roja) pasada la hora límite nocturna.`,
-        pensamiento: `No entro a ${p.distritoDestino} tan tarde de noche; regla de seguridad número uno: evadir asaltos.`,
+        pensamiento: `No entro a ${p.distritoDestino} tan tarde de noche; regla de seguridad número uno: evitar zonas de alto riesgo.`,
       };
     }
 

@@ -546,7 +546,7 @@ const APP = (function () {
           ${m.llegoAlFinal ? '🏆 ¡JORNADA COMPLETADA CON ÉXITO!' : '💀 TURNO FINALIZADO (QUIEBRE / VARADO)'}
         </div>
         <div style="margin-top: 0.3rem;">
-          Entregados: <strong>${estadoActual.pedidosEntregados}</strong> | Rechazados: <strong>${estadoActual.pedidosRechazados}</strong> | Asaltos: <strong>${estadoActual.asaltosSufridos}</strong>
+          Entregados: <strong>${estadoActual.pedidosEntregados}</strong> | Rechazados: <strong>${estadoActual.pedidosRechazados}</strong> | Averías: <strong>${estadoActual.averiasSufridas}</strong>
         </div>
         <div style="margin-top: 0.2rem;">
           Saldo Neto Final: <strong>S/ ${m.saldoNeto}</strong> | Puntaje Oficial: <strong>${m.puntaje} pts</strong>

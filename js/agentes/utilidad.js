@@ -11,7 +11,7 @@
 const AGENTE_UTILIDAD = {
   id: "utilidad",
   nombre: "Agente Basado en Utilidad",
-  descripcion: "Balanza matemática continua: Pondera ganancia vs riesgo de asalto vs consumo de recursos. Sliders calibrables en vivo.",
+  descripcion: "Balanza matemática continua: Pondera ganancia vs riesgo de zona vs consumo de recursos. Sliders calibrables en vivo.",
   icono: "⚖️",
   color: "#00ff88",
 

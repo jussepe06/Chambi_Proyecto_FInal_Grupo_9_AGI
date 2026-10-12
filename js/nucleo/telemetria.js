@@ -22,7 +22,7 @@ const TELEMETRIA = (function () {
       pagoTotal: pedido.pagoTotal,
       gastoBateriaEst: pedido.gastoBateria,
       gastoCombustibleEst: pedido.gastoCombustible,
-      probAsaltoEst: pedido.probAsalto,
+      riesgoZonaEst: pedido.probAsalto,
       bateriaPre: parseFloat(estado.bateria.toFixed(1)),
       combustiblePre: parseFloat(estado.combustible.toFixed(1)),
       saldoPre: parseFloat(estado.saldo.toFixed(1)),
