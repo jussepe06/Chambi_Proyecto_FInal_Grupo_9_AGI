@@ -3,8 +3,8 @@
 **Trabajo Final de Agentes Inteligentes — USIL 2026-2 (Parte 1)**  
 Simulador táctico multiagente y banco de pruebas de toma de decisiones bajo incertidumbre, recursos críticos y riesgo territorial.
 
-* **Demo en línea (GitHub Pages):** [https://jussepe06.github.io/AI-Grupo-9-Snake-juego-proyecto-final/](https://jussepe06.github.io/AI-Grupo-9-Snake-juego-proyecto-final/)
-* **Repositorio:** [https://github.com/jussepe06/AI-Grupo-9-Snake-juego-proyecto-final.git](https://github.com/jussepe06/AI-Grupo-9-Snake-juego-proyecto-final.git)
+* **Demo en línea (GitHub Pages):** [https://jussepe06.github.io/Chambi_Proyecto_FInal_Grupo_9_AGI/](https://jussepe06.github.io/Chambi_Proyecto_FInal_Grupo_9_AGI/)
+* **Repositorio:** [https://github.com/jussepe06/Chambi_Proyecto_FInal_Grupo_9_AGI.git](https://github.com/jussepe06/Chambi_Proyecto_FInal_Grupo_9_AGI.git)
 
 ---
 
@@ -74,13 +74,13 @@ Evaluación masiva de **200 jornadas nocturnas simuladas por técnica** (semilla
 
 ### En Línea (Recomendado)
 Abre la demo directamente en tu navegador:  
-👉 **[https://jussepe06.github.io/AI-Grupo-9-Snake-juego-proyecto-final/](https://jussepe06.github.io/AI-Grupo-9-Snake-juego-proyecto-final/)**
+👉 **[https://jussepe06.github.io/Chambi_Proyecto_FInal_Grupo_9_AGI/](https://jussepe06.github.io/Chambi_Proyecto_FInal_Grupo_9_AGI/)**
 
 ### Localmente (Sin dependencias externas)
 1. Clona el repositorio:
    ```bash
-   git clone https://github.com/jussepe06/AI-Grupo-9-Snake-juego-proyecto-final.git
-   cd AI-Grupo-9-Snake-juego-proyecto-final
+   git clone https://github.com/jussepe06/Chambi_Proyecto_FInal_Grupo_9_AGI.git
+   cd Chambi_Proyecto_FInal_Grupo_9_AGI
    ```
 2. Inicia un servidor web local con Python:
    ```bash
