@@ -20,8 +20,8 @@ const AGENTE_MODELO = {
     const factorClima = jornada.clima === "Lluvia Fuerte" ? 1.5 : jornada.clima === "Garúa Limeña" ? 1.2 : 1.0;
 
     // Modelo interno: reservas financieras y operativas requeridas
-    const reservaCuotaFija = MOTOR.CONFIG.CUOTA_ALQUILER_MOTO; // S/ 45
-    const reservaCena = MOTOR.CONFIG.COSTO_CENA;                 // S/ 12
+    const reservaCuotaFija = MOTOR.CONFIG.CUOTA_ALQUILER_MOTO; // S/ 35
+    const reservaCena = MOTOR.CONFIG.COSTO_CENA;                 // S/ 10
     const reservaImprevistos = (8.0 * factorClima);              // S/ 8 a S/ 12 por pinchazos o multas
     const reservaTotalDinero = reservaCuotaFija + reservaCena + reservaImprevistos;
 
