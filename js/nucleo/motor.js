@@ -90,12 +90,9 @@ const MOTOR = (function () {
       const factorHora = horaMin > (22 * 60) ? 1.4 : 1.0;
       const probAsalto = parseFloat(Math.min(0.85, destino.factorPeligro * factorHora).toFixed(2));
 
-      // Asaltos desactivados: nunca habra asaltos
-      const azarAsalto = rand();
+      // Sin asaltos ni averias (completamente desactivados)
       const habraAsalto = false;
-
-      // Evento de sorpresa mecánica eventual (pinchazo de llanta o lluvia)
-      const azarPinchazo = rand() < 0.12;
+      const azarPinchazo = false;
 
       pedidos.push({
         id: i + 1,
@@ -155,19 +152,8 @@ const MOTOR = (function () {
       nuevo.distritoActual = pedido.destino;
       nuevo.pedidosEntregados += 1;
 
-      // Evaluar consecuencias del entorno (asaltos desactivados)
-      if (pedido.habraAsalto) {
-        nuevo.asaltosSufridos += 1;
-        if (nuevo.asaltosSufridos >= 2) {
-          nuevo.asaltadoGrave = true;
-          nuevo.terminado = true;
-        }
-      }
-
-      if (pedido.azarPinchazo) {
-        nuevo.averiasSufridas += 1;
-        nuevo.saldo = Math.max(0, nuevo.saldo - 10.0); // Costo de llantero
-      }
+      // Asaltos y fallas mecanicas desactivados por completo
+      // (sin penalizaciones ni interrupciones fortuitas)
 
       // Desgaste natural de rating si llueve o demora
       if (jornada.clima === "Lluvia Fuerte" && Math.random() < 0.2) {
@@ -235,8 +221,7 @@ const MOTOR = (function () {
 
     // Bonos y penalizaciones
     if (estadoFinal.varado) puntaje -= CONFIG.PENALIZACION_VARADO;
-    if (estadoFinal.asaltadoGrave) puntaje -= CONFIG.PENALIZACION_ASALTO;
-    if (estadoFinal.asaltosSufridos > 0) puntaje -= (estadoFinal.asaltosSufridos * 40.0);
+    // Asaltos desactivados: sin penalizacion
     if (estadoFinal.saldo < 0) puntaje -= CONFIG.PENALIZACION_DEUDA;
 
     // Bono por alta calificación
