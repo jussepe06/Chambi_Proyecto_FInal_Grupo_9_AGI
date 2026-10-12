@@ -245,8 +245,13 @@ canvas#cityCanvas {
 
 /* Nube de pensamiento del agente (Ubicada debajo de la barra de controles) */
 .agent-thought-bubble {
-  position: relative;
-  width: 100%;
+  position: relative !important;
+  bottom: auto !important;
+  left: auto !important;
+  right: auto !important;
+  width: 100% !important;
+  margin-top: 0.8rem;
+  z-index: 10;
   background: var(--bg-card);
   border: 1px solid var(--border-color);
   border-left: 4px solid var(--accent-cyan);
@@ -285,6 +290,8 @@ canvas#cityCanvas {
 
 /* Barra de controles interactivos de simulación */
 .sim-controls-bar {
+  position: relative;
+  z-index: 20;
   background: var(--bg-card);
   border: 1px solid var(--border-color);
   border-radius: var(--radius-md);
