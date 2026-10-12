@@ -243,21 +243,20 @@ canvas#cityCanvas {
   border-color: var(--accent-red);
 }
 
-/* Nube de pensamiento del agente */
+/* Nube de pensamiento del agente (Ubicada debajo de la barra de controles) */
 .agent-thought-bubble {
-  position: absolute;
-  bottom: 20px;
-  left: 20px;
-  right: 20px;
-  background: rgba(18, 24, 38, 0.92);
-  border: 1px solid var(--accent-cyan);
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5), 0 0 15px rgba(0, 240, 255, 0.2);
+  position: relative;
+  width: 100%;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-left: 4px solid var(--accent-cyan);
+  box-shadow: var(--shadow-card);
   border-radius: var(--radius-md);
-  padding: 0.9rem 1.2rem;
+  padding: 0.85rem 1.2rem;
   display: flex;
   align-items: flex-start;
-  gap: 0.8rem;
-  backdrop-filter: blur(8px);
+  gap: 0.9rem;
+  transition: all 0.3s ease;
 }
 
 .bubble-avatar {
